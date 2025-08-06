@@ -590,14 +590,26 @@ def generate_report(ac_results, document_topic):
 
 # --- Save Report as PDF with improved formatting and no empty pages ---
 def save_report_to_pdf(report_text, file_path, document_topic):
-    doc = SimpleDocTemplate(
-        file_path,
-        pagesize=landscape(letter),
-        rightMargin=0.5*inch,
-        leftMargin=0.5*inch,
-        topMargin=0.5*inch,
-        bottomMargin=0.5*inch
-    )
+    # Handle both file paths and BytesIO objects
+    if isinstance(file_path, str):
+        doc = SimpleDocTemplate(
+            file_path,
+            pagesize=landscape(letter),
+            rightMargin=0.5*inch,
+            leftMargin=0.5*inch,
+            topMargin=0.5*inch,
+            bottomMargin=0.5*inch
+        )
+    else:
+        # For BytesIO objects
+        doc = SimpleDocTemplate(
+            file_path,
+            pagesize=landscape(letter),
+            rightMargin=0.5*inch,
+            leftMargin=0.5*inch,
+            topMargin=0.5*inch,
+            bottomMargin=0.5*inch
+        )
     
     styles = getSampleStyleSheet()
     elements = []
@@ -756,10 +768,10 @@ def save_report_to_pdf(report_text, file_path, document_topic):
     # Build the PDF document
     try:
         doc.build(elements)
-        print(f"✅ PDF report successfully generated: {file_path}")
+        print(f"✅ PDF report successfully generated")
         
         # Verify the PDF was created properly
-        if os.path.exists(file_path):
+        if isinstance(file_path, str) and os.path.exists(file_path):
             file_size = os.path.getsize(file_path)
             print(f"📄 PDF file size: {file_size:,} bytes")
             
@@ -780,6 +792,10 @@ def save_report_to_pdf(report_text, file_path, document_topic):
                 
             except Exception as verify_error:
                 print(f"⚠️ PDF verification warning: {str(verify_error)}")
+        elif hasattr(file_path, 'tell'):
+            # For BytesIO objects, check position
+            current_pos = file_path.tell()
+            print(f"📄 PDF buffer size: {current_pos:,} bytes")
         
     except Exception as e:
         print(f"❌ Error building PDF: {str(e)}")
