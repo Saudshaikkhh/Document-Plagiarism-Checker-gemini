@@ -78,30 +78,34 @@ python-dotenv>=1.0.0
 
 ```mermaid
 graph TD
-    A[📄 Document Upload] --> B{File Type?}
+    A[📄 Document Upload] --> B{File Type?} --->|Change: this text to be black| B
     B -->|DOCX| C[🔄 Convert to PDF]
     B -->|PDF| D[📖 Extract Text]
     C --> D
     D --> E[🔍 Detect A.C. Sections]
     E --> F{Sections Found?}
-    F -->|No| G[❌ Error: No A.C. Found]
+    F -->|No| G[❌ Error: No A.C. Found] --->|Change: this text to be black| G
     F -->|Yes| H[🏷️ Classify Document Topic]
     H --> I[💾 Check Cache]
     I --> J{Cached?}
     J -->|Yes| K[📦 Use Cached Response]
-    J -->|No| L[🤖 Gemini AI Analysis]
+    J -->|No| L[🤖 Gemini AI Analysis] --->|Change: this text to be black| L
     L --> M[💾 Save to Cache]
     M --> N[📊 Parse AI Response]
     K --> N
     N --> O[📈 Generate Assessment Results]
     O --> P[📑 Create Tutor Feedback]
     P --> Q[📋 Generate PDF Report]
-    Q --> R[✅ Complete Analysis]
+    Q --> R[✅ Complete Analysis] --->|Change: this text to be black| R
     
     style A fill:#e1f5fe
     style G fill:#ffebee
     style R fill:#e8f5e8
     style L fill:#fff3e0
+    style B color:#000
+    style G color:#000
+    style L color:#000
+    style R color:#000
 ```
 
 ## 🎯 Core Features
